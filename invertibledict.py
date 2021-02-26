@@ -103,17 +103,4 @@ class InvDict():
 
     def __str__(self):
         return self.dict.__str__()
-        
-        
-test = InvDict()
-
-test[1] = 24
-test[2] = 41
-test[3] = 42
-test[4] = 24
-test[1] = 24
-
-print(test.getInv(24))
-print(test.popitem())
-
-print(test.get(2))
+    
