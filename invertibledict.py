@@ -1,3 +1,6 @@
+# Invertible dictionary
+# Can be used as a regular dictionary
+# Additional getInv(val) method, which returns a tuple of all keys which have a value of val
 class InvDict():
     
     def __init__(self, dic=None):
@@ -25,8 +28,9 @@ class InvDict():
         
         return newInvDict
         
-    def fromkeys(self):
-        pass
+    def fromkeys(self, sequence, val=None):
+        for key in sequence:
+            self[key] = val
     
     def get(self, key):
         return self.dict.get(key)
@@ -40,14 +44,17 @@ class InvDict():
     def pop(self, key):
         
         val = self.dict.pop(key)
-        self.getInv(val).pop(key)
+        self.inverse[val].pop(key)
         
         if len(self.getInv(val))  == 0 :
             self.inverse.pop(val)
         return val
             
     def popitem(self):
-        pass
+        key, val = self.dict.popitem()
+        self.inverse[val].remove(key)
+            
+        return val;
     
     def setdefault(self):
         pass
@@ -58,11 +65,12 @@ class InvDict():
     def values(self):
         return self.dict.values()
     
+    #Returns a tuple of all keys which have a value of val
     def getInv(self, val):
-        return self.inverse[val]
+        # self.inverse[val] is a list for faster changes
+        return tuple(self.inverse[val])
         
     def __setitem__(self, key, val):
-
         
         #If key is not new
         if key in self.dict:
@@ -72,7 +80,7 @@ class InvDict():
                 return
             
             self.dict[key] = val        
-            self.getInv(oldVal).pop(key)
+            self.inverse[oldVal].remove(key)
             
             if len(self.getInv(oldVal)) == 0:
                 self.inverse.pop(oldVal)
@@ -82,11 +90,8 @@ class InvDict():
             self.dict[key] = val
         
         #If balue is not new
-        #
-        #
-        #May be better as a tuple
         if val in self.inverse:
-            self.getInv(val).append(key)
+            self.inverse[val].append(key)
             
         #If value is new
         else:
@@ -104,12 +109,11 @@ test = InvDict()
 
 test[1] = 24
 test[2] = 41
+test[3] = 42
 test[4] = 24
+test[1] = 24
 
 print(test.getInv(24))
-print(test)
-print(test[1])
-print(test.pop(1))
-print(test.getInv(24))
+print(test.popitem())
 
 print(test.get(2))
