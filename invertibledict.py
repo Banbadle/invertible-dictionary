@@ -10,7 +10,7 @@ class InvDict():
         if iterable == None:
             return
             
-         for key, val in iterable:
+        for key, val in iterable:
                 self[key] = val
             
     def clear(self):
