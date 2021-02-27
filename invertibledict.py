@@ -55,11 +55,18 @@ class InvDict():
             
         return val;
     
-    def setdefault(self):
-        pass
-    
-    def update(self):
-        pass
+    def setdefault(self, key, defaultValue=None):
+        if key not in self.dict:
+            self[key] = defaultValue
+            
+    def update(self, iterable):
+        if type(iterable) == dict:
+            for key, val in iterable.items():
+                self[key] = val
+                
+        else:
+            for key, val in iterable:
+                self[key] = val
     
     def values(self):
         return self.dict.values()
@@ -97,9 +104,6 @@ class InvDict():
             
     def __iter__(self):
         return self.dict.__iter__()
-    
-    def __next__(self):
-        return self.dict.__next__()
 
     def __getitem__(self, key):
         return self.dict[key]
