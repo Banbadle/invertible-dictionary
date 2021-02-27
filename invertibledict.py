@@ -3,16 +3,15 @@
 # Additional getInv(val) method, which returns a tuple of all keys which have a value of val
 class InvDict():
     
-    def __init__(self, dic=None):
+    def __init__(self, iterable=None):
         self.dict       = dict()
         self.inverse    = dict()
         
-        if type(dic) != dict and dic != None:
-            raise Exception("dic must be of type 'dict'")
+        if iterable == None:
+            return
             
-        if type(dic) == dict:    
-            for key, val in dic.getItems():
-                dic[key] = val
+         for key, val in iterable:
+                self[key] = val
             
     def clear(self):
         self.dict.clear()
@@ -67,7 +66,6 @@ class InvDict():
     
     #Returns a tuple of all keys which have a value of val
     def getInv(self, val):
-        # self.inverse[val] is a list for faster changes
         return tuple(self.inverse[val])
         
     def __setitem__(self, key, val):
@@ -88,14 +86,20 @@ class InvDict():
         #If key is new
         else:
             self.dict[key] = val
-        
-        #If balue is not new
+
+        #If value is not new
         if val in self.inverse:
             self.inverse[val].append(key)
-            
+
         #If value is new
         else:
             self.inverse[val] = [key]
+            
+    def __iter__(self):
+        return self.dict.__iter__()
+    
+    def __next__(self):
+        return self.dict.__next__()
 
     def __getitem__(self, key):
         return self.dict[key]
@@ -103,4 +107,3 @@ class InvDict():
 
     def __str__(self):
         return self.dict.__str__()
-    
