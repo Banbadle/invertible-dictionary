@@ -81,31 +81,35 @@ class InvDict():
         return tuple(self._inverse[val])
         
     def __setitem__(self, key, val):
+        try: hash(key)
+        except TypeError:
+            raise TypeError(f"key has unhashable type: '{type(key).__name__}'")
+            
+        try: hash(val)
+        except TypeError:
+            raise TypeError(f"value has unhashable type: '{type(val).__name__}'")
+            
         
-        #If key is not new
+        # If key already has a value, remove it from inverse
         if key in self._dict:
             
             oldVal = self._dict[key]
             if oldVal == val:
                 return
-            
-            self._dict[key] = val        
-            self._inverse[oldVal].remove(key)
+                 
+            self._inverse[oldVal].remove(key) # INEFFICIENCY
             
             if len(self.getinv(oldVal)) == 0:
                 self._inverse.pop(oldVal)
                 
-        #If key is new
-        else:
-            self._dict[key] = val
+                
+        self._dict[key] = val
 
-        #If value is not new
-        if val in self.inverse:
-            self.inverse[val].append(key)
+        # Initialise inverse if value is new
+        if val not in self._inverse:
+            self._inverse[val] = []
 
-        #If value is new
-        else:
-            self.inverse[val] = [key]
+        self._inverse[val].append(key)
             
     def __iter__(self):
         return self._dict.__iter__()
