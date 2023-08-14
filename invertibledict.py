@@ -119,3 +119,12 @@ class InvDict():
 
     def __str__(self):
         return self._dict.__str__()
+    
+    def __repr__(self):
+        return self._dict.__repr__()
+    
+    def __len__(self):
+        return len(self._dict)
+
+    def __delitem__(self, val):
+        pass
